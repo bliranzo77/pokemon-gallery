@@ -1,0 +1,129 @@
+.pokescroll_content_container {
+    width: 70%;
+    height: 650px;
+    position: relative;
+    top: 100px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background-color: #2A2A2A;
+    border-radius: 16px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.parent {
+    margin-left: 30px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 75px 25px;
+    grid-auto-rows: auto;
+    grid-column-gap: 25px;
+    grid-row-gap: 0px;
+    width: 95%;
+    animation: fadeIn 1.0s ease;
+}
+
+.div1 {
+    height: 450px;
+    grid-area: 1 / 1 / 7 / 2;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    background-color: #2A2A2A;
+    border-radius: 25px;
+}
+
+.div1 img {
+    height: 95%;
+    width: 95%;
+    object-fit: cover;
+    border-radius: 25px;
+}
+
+.div2 {
+    height: 400px;
+    width: 350px;
+    grid-area: 1 / 2 / 2 / 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 25px;
+    background-color: #E63946;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.div2 h1 {
+    font-size: 40px;
+    margin: 0 0 20px 0;
+    text-align: center;
+    color: white;
+}
+
+.field {
+    width: 80%;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px 15px;
+}
+
+.field p {
+    font-size: 22px;
+    margin: 0;
+    color: #333;
+}
+
+.label {
+    font-weight: bold;
+}
+
+.value {
+    text-align: right;
+}
+
+.description {
+    height: 125px;
+    width: 95%;
+    margin-top: 25px;
+    border-radius: 25px;
+    background-color: #1E1E1E;
+}
+
+.description_buttons_container {
+    width: 98%;
+    height: 105px;
+    position: relative;
+    top: 10px;
+    margin: auto;
+    background-color: #1E1E1E;
+    border-radius: 16px;
+}
+
+.description_buttons {
+    width: 50%;
+    height: 105px;
+    color: white;
+    background-color: #E63946;
+    border-color: #1E1E1E;
+    border-radius: 16px;
+    border-width: 10px;
+    border-style: solid;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: bold;
+    font-size: 50px;
+    transition: background-color 1.0s ease, border-color 0.3s ease;
+}
+
+.description_buttons:hover {
+    background-color: #FF6B6B;
+}

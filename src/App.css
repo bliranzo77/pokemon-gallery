@@ -1,0 +1,17 @@
+body {
+    background-color: #1E1E1E;
+    margin: 0;
+}
+
+@keyframes pageFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.app_container {
+    width: 100%;
+    height: auto;
+    background-color: #1E1E1E;
+    padding-bottom: 150px;
+    animation: pageFadeIn 2.5s ease;
+}
