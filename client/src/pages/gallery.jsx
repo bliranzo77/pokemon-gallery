@@ -4,12 +4,12 @@ import Nav from '../components/Nav';
 
 function Gallery() {
   return (
-    <>
-      <section className='app_container'>
-        <Nav />
+    <section className='app_container'>
+      <Nav />
+      <main>
         <Grid />
-      </section>
-    </>
+      </main>
+    </section>
   );
 }
 

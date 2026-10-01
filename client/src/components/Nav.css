@@ -1,48 +1,139 @@
-.nav_content_container {
-    /* Sizing */
-    width: 70%;
-    height: 200px;
-
-    /* Alignment */
-    position: relative;
-    top: 50px;
-    margin: auto;
-
-    /* Style */
-    background-color: #2A2A2A;
-    border-radius: 16px;
+.site-header {
+    border-bottom: 2px solid var(--ink);
 }
 
-.nav_button_container {
-    /* Sizing */
-    width: 98%;
-    height: 180px;
-
-    /* Alignment */
-    position: relative;
-    top: 10px;
-    margin: auto;
-    
-    /* Style */
-    background-color: #2A2A2A;
-    border-radius: 16px;
+/* Three columns: the two outer ones share the leftover space equally, so the
+   links sit at the true centre whatever the brand and search widths. */
+.site-header-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-areas: "brand nav search";
+    align-items: center;
+    column-gap: 2rem;
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: 1.25rem var(--gutter);
 }
 
-.nav_buttons {
-    /* Sizing */
-    width: 50%;
-    height: 180px;
+.wordmark {
+    grid-area: brand;
+    justify-self: start;
+    font-stretch: 75%;
+    font-weight: 800;
+    font-size: var(--step-1);
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    color: var(--ink);
+    text-decoration: none;
+}
 
-    /* Alignment */
+.wordmark-short {
+    display: none;
+}
 
-    /* Style */
-    color: white;
-    background-color: #E63946;
-    border-color: #2A2A2A;
-    border-radius: 16px;
-    border-width: 10px;
-    border-style: solid;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-weight: bold;
-    font-size: 50px;  
+.site-nav {
+    grid-area: nav;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.site-nav a {
+    padding: 0.25rem 0;
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+}
+
+.site-nav a:hover {
+    color: var(--ink);
+}
+
+.site-nav a[aria-current="page"] {
+    color: var(--ink);
+    font-weight: 600;
+    border-bottom-color: var(--ink);
+}
+
+.site-search {
+    grid-area: search;
+    display: flex;
+    justify-content: flex-end;
+    min-width: 0;
+}
+
+.search-toggle {
+    grid-area: toggle;
+    display: none;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    background: transparent;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.search-toggle[aria-expanded="true"] {
+    background: var(--ink);
+    color: var(--wall);
+}
+
+/* Medium widths: the short brand keeps clear of the centred links */
+@media (max-width: 64rem) {
+    .wordmark-full {
+        display: none;
+    }
+
+    .wordmark-short {
+        display: inline;
+    }
+}
+
+/* Narrow: brand and search button on top, links below, search expands
+   between them */
+@media (max-width: 47.99rem) {
+    .site-header-inner {
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas:
+            "brand  toggle"
+            "search search"
+            "nav    nav";
+        row-gap: 0.75rem;
+        padding-top: 0.875rem;
+        padding-bottom: 0;
+    }
+
+    .wordmark-full {
+        display: inline;
+    }
+
+    .wordmark-short {
+        display: none;
+    }
+
+    .search-toggle {
+        display: grid;
+    }
+
+    .site-search {
+        display: none;
+    }
+
+    .is-search-open .site-search {
+        display: flex;
+    }
+
+    .site-search .searchbar {
+        width: 100%;
+    }
+
+    .site-nav {
+        justify-content: center;
+        gap: 2.5rem;
+    }
+
+    .site-nav a {
+        padding: 0.375rem 0 0.625rem;
+    }
 }

@@ -1,0 +1,654 @@
+.compare {
+    --scale-ease: cubic-bezier(0.3, 0.7, 0.2, 1);
+    --axis: 7rem;
+
+    max-width: min(var(--page-max), 84rem);
+    margin: 0 auto;
+    padding: clamp(2rem, 5vw, 3.5rem) var(--gutter) 0;
+}
+
+.compare > h1 {
+    margin: 0 0 2rem;
+    font-stretch: 62%;
+    font-weight: 800;
+    font-size: clamp(3rem, 6vw, 4.5rem);
+    line-height: 0.9;
+    letter-spacing: -0.015em;
+}
+
+/* Pickers: two fields facing a swap button */
+
+.compare-pickers {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: end;
+    gap: 1rem;
+}
+
+.compare-swap {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 2.75rem;
+}
+
+.picker {
+    position: relative;
+    min-width: 0;
+}
+
+.picker-label {
+    display: block;
+    margin-bottom: 0.375rem;
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+}
+
+.picker-field {
+    position: relative;
+}
+
+.picker-current {
+    position: absolute;
+    left: 0.375rem;
+    top: 50%;
+    width: 2rem;
+    height: 2rem;
+    translate: 0 -50%;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+.picker-input {
+    width: 100%;
+    height: 2.75rem;
+    padding: 0 2.25rem 0 2.75rem;
+    background: var(--wall-raised);
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    font-weight: 600;
+    text-overflow: ellipsis;
+}
+
+.picker-input.is-open {
+    padding-left: 0.875rem;
+    font-weight: 400;
+}
+
+.picker-input::placeholder {
+    color: var(--ink-soft);
+}
+
+.picker-caret {
+    position: absolute;
+    right: 0.875rem;
+    top: 50%;
+    translate: 0 -50%;
+    pointer-events: none;
+}
+
+.picker-list {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 50;
+    max-height: min(22rem, 60svh);
+    overflow-y: auto;
+    margin: 0;
+    padding: 0.25rem 0;
+    list-style: none;
+    background: var(--wall-raised);
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+}
+
+.picker-option {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.25rem 0.75rem;
+    cursor: pointer;
+}
+
+.picker-option img {
+    width: 2.25rem;
+    height: 2.25rem;
+    object-fit: contain;
+}
+
+.picker-option[aria-selected="true"] {
+    background: var(--line-half);
+}
+
+.picker-option[aria-disabled="true"] {
+    color: var(--ink-soft);
+    cursor: not-allowed;
+}
+
+.picker-option[aria-disabled="true"] img {
+    opacity: 0.4;
+}
+
+.picker-no {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+}
+
+.picker-name {
+    font-weight: 600;
+}
+
+.picker-note {
+    margin-left: auto;
+    font-size: var(--step--1);
+    font-style: italic;
+}
+
+.picker-empty {
+    padding: 0.5rem 0.75rem;
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+}
+
+/* The two Pokemon, facing each other across the centre */
+
+.compare-faces {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--axis);
+    margin: 2.5rem 0 1rem;
+}
+
+.face {
+    display: flex;
+    align-items: flex-end;
+    gap: 1.25rem;
+}
+
+.face-a {
+    flex-direction: row;
+    text-align: right;
+    justify-content: flex-end;
+}
+
+.face-a .face-art {
+    order: 2;
+}
+
+.face-art {
+    width: clamp(7rem, 16vw, 13rem);
+    aspect-ratio: 1;
+    object-fit: contain;
+}
+
+.face-no {
+    margin: 0;
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+}
+
+.face-name {
+    margin: 0 0 0.5rem;
+    font-stretch: 62%;
+    font-weight: 800;
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    line-height: 0.95;
+}
+
+.face-name a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.face-name a:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+}
+
+.face-types {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+}
+
+.face-a .face-types {
+    justify-content: flex-end;
+}
+
+/* Sections */
+
+.compare-section {
+    margin-top: 3rem;
+}
+
+.compare-section > h2 {
+    margin: 0 0 1.25rem;
+    padding-top: 0.75rem;
+    border-top: 2px solid var(--ink);
+    font-stretch: 75%;
+    font-weight: 800;
+    font-size: var(--step-1);
+}
+
+.compare-section h3 {
+    margin: 0 0 0.75rem;
+    font-stretch: 87.5%;
+    font-weight: 700;
+    font-size: var(--step-0);
+}
+
+.compare-note {
+    margin: -0.75rem 0 1rem;
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+}
+
+.compare-summary {
+    max-width: 44rem;
+    margin: 1.25rem auto 0;
+    text-align: center;
+}
+
+.compare-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem var(--axis);
+}
+
+/* Base stats: mirrored bars growing out from a central label */
+
+.stat-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.stat-cells {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--axis) minmax(0, 1fr);
+    align-items: center;
+    padding: 0.375rem 0;
+}
+
+.stat-row.is-total .stat-cells {
+    margin-top: 0.5rem;
+    padding-top: 0.875rem;
+    border-top: 2px solid var(--line-foot);
+}
+
+.stat-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.stat-even {
+    font-size: var(--step--1);
+    font-weight: 400;
+    color: var(--ink-soft);
+}
+
+/* Bars grow out from the centre; each number sits at the end of its bar */
+.stat-side {
+    --num-space: 6.5rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.625rem;
+}
+
+.stat-b {
+    flex-direction: row-reverse;
+}
+
+.stat-bar {
+    flex: none;
+    width: calc(var(--v) * (100% - var(--num-space)));
+    height: 0.875rem;
+    background: #9AA8B3;
+    border-radius: 2px;
+}
+
+.is-animated .stat-bar {
+    transition: width 500ms var(--scale-ease);
+}
+
+.stat-diff {
+    font-size: var(--step--1);
+    font-weight: 700;
+}
+
+.is-leader .stat-bar {
+    background: var(--ink);
+}
+
+.is-leader .stat-num {
+    font-weight: 700;
+}
+
+.is-total .stat-num {
+    font-stretch: 75%;
+    font-size: var(--step-1);
+}
+
+/* Size: both drawn against one ruler */
+
+.size-chart {
+    --ruler-w: 3.25rem;
+
+    position: relative;
+    height: clamp(14rem, min(44vh, 50vw), 28rem);
+    border-bottom: 3px solid var(--ink);
+}
+
+.size-ruler {
+    position: absolute;
+    inset: 0;
+}
+
+.size-ruler .tick {
+    position: absolute;
+    left: var(--ruler-w);
+    right: 0;
+    height: 0;
+    border-top: 1px solid var(--line-half);
+    transition: bottom 600ms var(--scale-ease), opacity 300ms ease;
+}
+
+.size-ruler .tick-foot {
+    border-top: 2px solid var(--line-foot);
+}
+
+.size-ruler .tick span {
+    position: absolute;
+    right: calc(100% + 0.625rem);
+    top: -0.75em;
+    white-space: nowrap;
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+}
+
+.size-stage {
+    position: absolute;
+    inset: 0 0 0 var(--ruler-w);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+}
+
+.size-slot {
+    position: relative;
+}
+
+.size-slot img {
+    position: absolute;
+    left: 50%;
+    width: auto;
+    translate: -50% 0;
+}
+
+.size-mark {
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    border-top: 2px dashed var(--ink);
+    transition: bottom 600ms var(--scale-ease);
+}
+
+.size-mark span {
+    position: absolute;
+    right: 0;
+    bottom: 0.25rem;
+    padding: 0 0.25rem;
+    background: var(--wall);
+    font-size: var(--step--1);
+    font-weight: 600;
+}
+
+.size-facts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 1rem 0 0;
+    padding-left: 3.25rem;
+}
+
+.size-fact {
+    text-align: center;
+}
+
+.size-fact dt {
+    font-weight: 700;
+}
+
+.size-fact dd {
+    margin: 0;
+    color: var(--ink-soft);
+}
+
+/* Type matchups */
+
+.matchup-list {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.matchup {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+}
+
+.matchup-mult {
+    flex: none;
+    min-width: 2.75rem;
+    padding: 0.125rem 0.5rem;
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+    text-align: center;
+    font-weight: 700;
+    font-size: var(--step--1);
+}
+
+.matchup.is-strong .matchup-mult {
+    background: var(--ink);
+    color: var(--wall);
+}
+
+.matchup.is-weak .matchup-mult {
+    border-style: dashed;
+}
+
+.matchup.is-neutral .matchup-mult {
+    border-color: var(--line-foot);
+    font-weight: 600;
+}
+
+/* Evolution */
+
+.evo-stage {
+    margin: -0.5rem 0 0.75rem;
+    color: var(--ink-soft);
+}
+
+.evo-chain {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.25rem 1.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.evo-chain li {
+    position: relative;
+}
+
+/* Arrow where the stage goes up */
+.evo-chain li.evolves::before {
+    content: "";
+    position: absolute;
+    left: -1.125rem;
+    top: 1.75rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-top: 2px solid var(--ink-soft);
+    border-right: 2px solid var(--ink-soft);
+    rotate: 45deg;
+}
+
+.evo-chain a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 0.25rem;
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+}
+
+.evo-chain a:hover {
+    color: var(--ink);
+}
+
+.evo-chain a[aria-current="true"] {
+    color: var(--ink);
+    font-weight: 700;
+    border-bottom-color: var(--ink);
+}
+
+.evo-chain img {
+    width: 4rem;
+    height: 4rem;
+    object-fit: contain;
+}
+
+/* Narrow screens: pickers pin to the top while the comparison scrolls */
+
+@media (max-width: 47.99rem) {
+    .compare {
+        --axis: 5.25rem;
+    }
+
+    .compare-pickers {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        gap: 0.5rem;
+        margin: 0 calc(var(--gutter) * -1);
+        padding: 0.625rem var(--gutter);
+        background: var(--wall);
+        border-bottom: 2px solid var(--line-foot);
+    }
+
+    .picker-label {
+        margin-bottom: 0.125rem;
+    }
+
+    /* Room for the full name: no caret, slightly narrower type */
+    .picker-caret {
+        display: none;
+    }
+
+    .picker-input {
+        padding-right: 0.5rem;
+        font-stretch: 87.5%;
+    }
+
+    /* The open list spans both pickers so names and notes fit */
+    .picker {
+        position: static;
+    }
+
+    .picker-list {
+        top: calc(100% - 0.25rem);
+        left: var(--gutter);
+        right: var(--gutter);
+    }
+
+    .compare-swap {
+        width: 2.75rem;
+        justify-content: center;
+        padding: 0;
+    }
+
+    .compare-swap-text {
+        display: none;
+    }
+
+    .compare-faces {
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .face,
+    .face-a {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .face-a .face-art {
+        order: 0;
+    }
+
+    .face-types,
+    .face-a .face-types {
+        justify-content: center;
+    }
+
+    /* Stat name on its own line above the two bars */
+    .stat-cells {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-areas:
+            "label label"
+            "a     b";
+        column-gap: 0.75rem;
+        row-gap: 0.125rem;
+    }
+
+    .stat-label {
+        grid-area: label;
+        flex-direction: row;
+        justify-content: center;
+        gap: 0.5rem;
+        font-size: var(--step--1);
+    }
+
+    .stat-a {
+        grid-area: a;
+    }
+
+    .stat-b {
+        grid-area: b;
+    }
+
+    .stat-side {
+        --num-space: 5rem;
+        gap: 0.375rem;
+    }
+
+    .size-chart {
+        --ruler-w: 2.75rem;
+    }
+
+    .size-facts {
+        margin-left: 0;
+        padding-left: 2.75rem;
+        font-size: var(--step--1);
+    }
+
+    .compare-columns {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}

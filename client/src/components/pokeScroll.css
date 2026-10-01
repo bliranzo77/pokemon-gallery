@@ -1,129 +1,244 @@
-.pokescroll_content_container {
-    width: 70%;
-    height: 650px;
-    position: relative;
-    top: 100px;
-    margin: auto;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-    background-color: #2A2A2A;
-    border-radius: 16px;
-}
+.entry {
+    --ruler-w: 3.25rem;
+    /* Fill the window below the header (header, padding and labels ≈ 13rem) */
+    --chart-h: clamp(18rem, calc(100svh - 13rem), 64rem);
+    --scale-ease: cubic-bezier(0.3, 0.7, 0.2, 1);
 
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-
-.parent {
-    margin-left: 30px;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 75px 25px;
-    grid-auto-rows: auto;
-    grid-column-gap: 25px;
-    grid-row-gap: 0px;
-    width: 95%;
-    animation: fadeIn 1.0s ease;
+    grid-template-columns: minmax(17rem, 1fr) minmax(0, 1.5fr);
+    grid-template-rows: 1fr auto;
+    grid-template-areas:
+        "info  chart"
+        "steps chart";
+    gap: 2rem clamp(2rem, 5vw, 5rem);
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: clamp(2rem, 5vw, 3.5rem) var(--gutter) 0;
 }
 
-.div1 {
-    height: 450px;
-    grid-area: 1 / 1 / 7 / 2;
-    align-items: center;
+/* While the next entry loads, the current one stays put, slightly dimmed */
+.entry.is-loading .entry-info,
+.entry.is-loading .entry-stage {
+    opacity: 0.6;
+    transition: opacity 150ms ease 150ms;
+}
+
+.entry-skeleton .entry-info {
+    display: grid;
+    gap: 1rem;
+}
+
+.entry-skeleton-name {
+    display: block;
+    width: 70%;
+    height: 5rem;
+}
+
+/* Info column */
+
+.entry-info {
+    grid-area: info;
+    align-self: end;
+    container-type: inline-size;
+}
+
+.entry-no {
+    margin: 0;
+    font-size: var(--step-1);
+    color: var(--ink-soft);
+}
+
+.entry-name {
+    margin: 0.25rem 0 1rem;
+    font-stretch: 62%;
+    font-weight: 800;
+    /* Sized to the column so the longest name (Charmeleon) holds one line */
+    font-size: clamp(3rem, 25cqi, 10rem);
+    line-height: 0.88;
+    letter-spacing: -0.015em;
+    overflow-wrap: break-word;
+}
+
+.entry-types {
     display: flex;
-    justify-content: center;
-    background-color: #2A2A2A;
-    border-radius: 25px;
+    gap: 0.5rem;
+    margin: 0 0 2rem;
+    padding: 0;
+    list-style: none;
 }
 
-.div1 img {
-    height: 95%;
-    width: 95%;
-    object-fit: cover;
-    border-radius: 25px;
+.entry-stats {
+    display: grid;
+    grid-template-columns: repeat(2, max-content);
+    gap: 2.5rem;
+    margin: 0;
 }
 
-.div2 {
-    height: 400px;
-    width: 350px;
-    grid-area: 1 / 2 / 2 / 3;
+.entry-stats dt {
+    color: var(--ink-soft);
+    font-size: var(--step--1);
+}
+
+.entry-compare {
+    display: inline-block;
+    margin-top: 1.75rem;
+    color: var(--ink);
+    text-decoration: none;
+}
+
+.entry-stats dd {
+    margin: 0;
+    font-stretch: 75%;
+    font-weight: 700;
+    font-size: var(--step-2);
+    line-height: 1.1;
+}
+
+/* Chart: a ruler on the left, the figure standing on the baseline */
+
+.entry-chart {
+    grid-area: chart;
+    position: relative;
+    height: var(--chart-h);
+    margin-top: 1.5rem;
+    border-bottom: 3px solid var(--ink);
+}
+
+.entry-ruler {
+    position: absolute;
+    inset: 0;
+}
+
+.tick {
+    position: absolute;
+    left: var(--ruler-w);
+    right: 0;
+    height: 0;
+    border-top: 1px solid var(--line-half);
+    transition: bottom 600ms var(--scale-ease), opacity 300ms ease;
+}
+
+.tick-foot {
+    border-top: 2px solid var(--line-foot);
+}
+
+.tick span {
+    position: absolute;
+    right: calc(100% + 0.625rem);
+    top: -0.75em;
+    white-space: nowrap;
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+}
+
+.entry-stage {
+    position: absolute;
+    inset: 0 0 0 var(--ruler-w);
+    overflow: hidden;
+}
+
+.entry-figure {
+    position: absolute;
+    left: 50%;
+    width: auto;
+    translate: -50% 0;
+    animation: stand-up 600ms var(--scale-ease);
+}
+
+@keyframes stand-up {
+    from {
+        opacity: 0;
+        transform: translateY(6%);
+    }
+}
+
+.entry-mark {
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-top: 2px dashed var(--ink);
+    transition: bottom 600ms var(--scale-ease);
+}
+
+.entry-mark span {
+    position: absolute;
+    right: 0;
+    bottom: 0.25rem;
+    padding: 0 0.25rem;
+    background: var(--wall);
+    font-weight: 600;
+    font-size: var(--step--1);
+}
+
+/* Previous / next */
+
+.entry-steps {
+    grid-area: steps;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    align-self: end;
+}
+
+.entry-steps button {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    border-radius: 25px;
-    background-color: #E63946;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    align-items: flex-start;
+    padding: 0.625rem 0.875rem;
+    text-align: left;
+    background: transparent;
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    cursor: pointer;
 }
 
-.div2 h1 {
-    font-size: 40px;
-    margin: 0 0 20px 0;
-    text-align: center;
-    color: white;
-}
-
-.field {
-    width: 80%;
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: white;
-    border-radius: 8px;
-    padding: 10px 15px;
-}
-
-.field p {
-    font-size: 22px;
-    margin: 0;
-    color: #333;
-}
-
-.label {
-    font-weight: bold;
-}
-
-.value {
+.entry-steps button + button {
+    align-items: flex-end;
     text-align: right;
 }
 
-.description {
-    height: 125px;
-    width: 95%;
-    margin-top: 25px;
-    border-radius: 25px;
-    background-color: #1E1E1E;
+.entry-steps button:hover:not(:disabled) {
+    background: var(--ink);
+    color: var(--wall);
 }
 
-.description_buttons_container {
-    width: 98%;
-    height: 105px;
-    position: relative;
-    top: 10px;
-    margin: auto;
-    background-color: #1E1E1E;
-    border-radius: 16px;
+.entry-steps button:hover:not(:disabled) .step-dir {
+    color: inherit;
 }
 
-.description_buttons {
-    width: 50%;
-    height: 105px;
-    color: white;
-    background-color: #E63946;
-    border-color: #1E1E1E;
-    border-radius: 16px;
-    border-width: 10px;
-    border-style: solid;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-weight: bold;
-    font-size: 50px;
-    transition: background-color 1.0s ease, border-color 0.3s ease;
+.entry-steps button:disabled {
+    border-color: var(--line-foot);
+    color: var(--ink-soft);
+    cursor: default;
 }
 
-.description_buttons:hover {
-    background-color: #FF6B6B;
+.step-dir {
+    font-size: var(--step--1);
+    color: var(--ink-soft);
+}
+
+.step-name {
+    font-weight: 600;
+}
+
+@media (max-width: 52rem) {
+    .entry {
+        --ruler-w: 2.75rem;
+        /* Short enough that Venusaur's leaves fit the width */
+        --chart-h: clamp(16rem, 78vw, 36rem);
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto;
+        grid-template-areas:
+            "info"
+            "chart"
+            "steps";
+    }
+
+    .entry-chart {
+        margin-top: 0;
+    }
+
+    .entry-name {
+        font-size: clamp(3rem, 18cqi, 6rem);
+    }
 }

@@ -1,73 +1,94 @@
 import './pokeScroll.css';
-import pokedex from "../data/data";
+import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { formatHeight, formatWeight, typesOf, figureBox, rulerScale, scaleToFitWidth } from "../data/measure";
+import TypePill from './TypePill';
 
-function PokeScroll({ currentIndex, onNavigate }) {
-  const pokemon = pokedex[currentIndex];
+const pct = (n) => `${n * 100}%`;
 
-  const typeLabel = pokemon.type_2
-    ? `${pokemon.type} / ${pokemon.type_2}`
-    : pokemon.type;
+// One entry: { pokemon, prev, next } from GET /api/pokemon/:id.
+// `onNavigate` receives a neighbour; `loading` is true while the next one loads.
+function PokeScroll({ detail, onNavigate, loading = false }) {
+  const { pokemon, prev, next } = detail;
+
+  // The ruler re-scales to each Pokemon, with headroom above, and enough
+  // for wide ones to fit the stage (roughly as wide as it is tall).
+  const inches = pokemon.height_in;
+  const { scaleInches, ticks } = rulerScale(inches, scaleToFitWidth(pokemon, 0.95));
+  const fraction = inches / scaleInches;
+  const box = figureBox(pokemon, fraction);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.target.closest('input, textarea, select')) return;
+      if (e.key === 'ArrowLeft' && prev) onNavigate(prev);
+      if (e.key === 'ArrowRight' && next) onNavigate(next);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [prev, next, onNavigate]);
 
   return (
-    <section className='pokescroll_content_container'>
-
-      <div className="parent" key={currentIndex}>
-
-        <div className="div1">
-          <img src={pokemon.photo} alt={pokemon.name} />
-        </div>
-
-        <div className="div2">
-          <h1>Pokedex Data</h1>
-
-          <div className="field">
-            <p className="label">National #:</p>
-            <p className="value">{pokemon.national_number}</p>
+    <article className={loading ? 'entry is-loading' : 'entry'} aria-busy={loading}>
+      <div className="entry-info">
+        <p className="entry-no">No. {pokemon.national_number}</p>
+        <h1 className="entry-name">{pokemon.name}</h1>
+        <ul className="entry-types" aria-label="Type">
+          {typesOf(pokemon).map(t => <li key={t}><TypePill type={t} /></li>)}
+        </ul>
+        <dl className="entry-stats">
+          <div>
+            <dt>Height</dt>
+            <dd>{formatHeight(pokemon.height_in)}</dd>
           </div>
-
-          <div className="field">
-            <p className="label">Name:</p>
-            <p className="value">{pokemon.name}</p>
+          <div>
+            <dt>Weight</dt>
+            <dd>{formatWeight(pokemon.weight_lb)}</dd>
           </div>
-
-          <div className="field">
-            <p className="label">Type:</p>
-            <p className="value">{typeLabel}</p>
-          </div>
-
-          <div className="field">
-            <p className="label">Height:</p>
-            <p className="value">{pokemon.height}</p>
-          </div>
-
-          <div className="field">
-            <p className="label">Weight:</p>
-            <p className="value">{pokemon.weight}</p>
-          </div>
-        </div>
-
+        </dl>
+        <Link className="outline-button entry-compare" to={`/compare?a=${pokemon.id}`}>
+          Compare {pokemon.name} with another Pokémon
+        </Link>
       </div>
 
-      <div className="description">
-        <div className="description_buttons_container">
-          <button
-            className="description_buttons"
-            onClick={() => onNavigate(-1)}
-            disabled={currentIndex === 0}
-          >
-            Back
-          </button>
-          <button
-            className="description_buttons"
-            onClick={() => onNavigate(1)}
-            disabled={currentIndex === pokedex.length - 1}
-          >
-            Next
-          </button>
+      <div className="entry-chart">
+        <div className="entry-ruler" aria-hidden="true">
+          {ticks.map(t => (
+            <div
+              key={t.at}
+              className={t.major ? 'tick tick-foot' : 'tick'}
+              style={{ bottom: pct(t.at / scaleInches) }}
+            >
+              {t.label && <span>{t.label}</span>}
+            </div>
+          ))}
+        </div>
+
+        <div className="entry-stage">
+          <img
+            key={pokemon.id}
+            className="entry-figure"
+            src={pokemon.photo}
+            alt={`${pokemon.name}, drawn to scale`}
+            style={{ height: pct(box.imgHeight), bottom: pct(-box.sink) }}
+          />
+          <div className="entry-mark" style={{ bottom: pct(fraction) }} aria-hidden="true">
+            <span>{formatHeight(pokemon.height_in)}</span>
+          </div>
         </div>
       </div>
 
-    </section>
+      <nav className="entry-steps" aria-label="Neighbouring entries">
+        <button onClick={() => onNavigate(prev)} disabled={!prev}>
+          <span className="step-dir">Previous</span>
+          <span className="step-name">{prev ? prev.name : 'Start of list'}</span>
+        </button>
+        <button onClick={() => onNavigate(next)} disabled={!next}>
+          <span className="step-dir">Next</span>
+          <span className="step-name">{next ? next.name : 'End of list'}</span>
+        </button>
+      </nav>
+    </article>
   );
 }
 
