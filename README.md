@@ -28,11 +28,11 @@ A React Pokedex app for the first 15 Gen 1 Pokemon. Browse individual stats with
 ## Quick Start
 
 ```bash
-npm install
-npm start
+npm run install:all
+npm run dev
 ```
 
-Opens at [http://localhost:3000](http://localhost:3000). No backend or database needed to run the frontend.
+Starts the React client (Vite) at [http://localhost:3000](http://localhost:3000) and the Express API at [http://localhost:5001](http://localhost:5001). To run only the frontend (no database needed): `npm run dev --prefix client`.
 
 For full setup instructions (environment variables, backend server, adding more Pokemon) see [GUIDE.md](GUIDE.md).
 

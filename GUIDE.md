@@ -8,30 +8,37 @@ A React-based Pokedex app featuring the first 15 Gen 1 Pokemon. Browse individua
 
 ```
 pokemon-gallery/
-├── public/
-│   └── pokemon_assets/     # Pokemon PNG images (served statically)
-├── server/
-│   ├── server.js           # Express API server
-│   └── db.js               # MongoDB connection
-├── src/
-│   ├── App.jsx             # Root router
-│   ├── App.css             # Global container styles
-│   ├── index.js            # React DOM entry point
-│   ├── components/
-│   │   ├── Nav.jsx         # Navigation bar
-│   │   ├── Nav.css
-│   │   ├── PokeScroll.jsx  # Single-Pokemon carousel viewer
-│   │   ├── pokeScroll.css
-│   │   ├── Grid.jsx        # Full gallery grid
-│   │   └── grid.css
-│   ├── data/
-│   │   └── data.js         # Hardcoded Pokemon dataset (15 entries)
-│   └── pages/
-│       ├── home.jsx        # Home page (PokeScroll)
-│       └── gallery.jsx     # Gallery page (Grid)
-├── .env                    # Environment variables (not committed)
-├── .env.example            # Template for required env vars
-└── package.json
+├── client/                     # React frontend (Vite)
+│   ├── index.html              # Vite entry HTML
+│   ├── vite.config.js          # Dev server on :3000, proxies /api to :5001
+│   ├── package.json
+│   ├── public/
+│   │   └── pokemon_assets/     # Pokemon PNG images (served statically)
+│   └── src/
+│       ├── main.jsx            # React DOM entry point
+│       ├── App.jsx             # Root router
+│       ├── App.css             # Global container styles
+│       ├── components/
+│       │   ├── Nav.jsx         # Navigation bar
+│       │   ├── PokeScroll.jsx  # Single-Pokemon carousel viewer
+│       │   ├── SearchBar.jsx   # Search dropdown
+│       │   ├── Grid.jsx        # Full gallery grid
+│       │   └── *.css
+│       ├── data/
+│       │   └── data.js         # Hardcoded Pokemon dataset (15 entries)
+│       └── pages/
+│           ├── home.jsx        # Home page (PokeScroll)
+│           └── gallery.jsx     # Gallery page (Grid)
+├── server/                     # Express API
+│   ├── server.js               # Entry point
+│   ├── config/
+│   │   └── db.js               # MongoDB connection
+│   ├── routes/
+│   │   └── notesRoutes.js
+│   ├── .env                    # Environment variables (not committed)
+│   ├── .env.example            # Template for required env vars
+│   └── package.json
+└── package.json                # Root scripts (runs client + server together)
 ```
 
 ---
@@ -49,15 +56,17 @@ pokemon-gallery/
 ### 1. Install Dependencies
 
 ```bash
-npm install
+npm run install:all
 ```
+
+Installs dependencies for the root, `client/`, and `server/`.
 
 ### 2. Set Up Environment Variables
 
-Copy `.env.example` to `.env` and fill in your values:
+Copy `server/.env.example` to `server/.env` and fill in your values:
 
 ```bash
-cp .env.example .env
+cp server/.env.example server/.env
 ```
 
 ```.env
@@ -67,21 +76,20 @@ PORT=5001
 
 > The frontend runs entirely on local data, so the `.env` is only required if you plan to run the backend server.
 
-### 3. Run the Frontend (React)
-
-```bash
-npm start
-```
-
-Opens the app at [http://localhost:3000](http://localhost:3000).
-
-### 4. Run the Backend Server (optional)
+### 3. Run the App
 
 ```bash
 npm run dev
 ```
 
-Starts the Express server at [http://localhost:5001](http://localhost:5001).
+Starts both the Vite client at [http://localhost:3000](http://localhost:3000) and the Express server at [http://localhost:5001](http://localhost:5001). In development, requests from the client to `/api/*` are proxied to the server.
+
+To run only one side:
+
+```bash
+npm run dev --prefix client   # frontend only (no database needed)
+npm run dev --prefix server   # backend only (nodemon)
+```
 
 **Available endpoint:**
 - `GET /api/health` — Returns `{ "status": "API running" }`
@@ -105,16 +113,20 @@ Starts the Express server at [http://localhost:5001](http://localhost:5001).
 
 | Command | Description |
 |---|---|
-| `npm start` | Start the React dev server (port 3000) |
-| `npm run build` | Build the React app for production |
-| `npm run dev` | Start the Express backend (port 5001) |
-| `npm test` | Run the test suite |
+Run from the project root:
+
+| Command | Description |
+|---|---|
+| `npm run install:all` | Install root, client, and server dependencies |
+| `npm run dev` | Start client (port 3000) and server (port 5001) together |
+| `npm run build` | Build the client for production (`client/dist/`) |
+| `npm start` | Start the Express server with plain `node` |
 
 ---
 
 ## Adding More Pokemon
 
-Edit [src/data/data.js](src/data/data.js) and add a new entry following the existing format:
+Edit [client/src/data/data.js](client/src/data/data.js) and add a new entry following the existing format:
 
 ```js
 {
@@ -129,7 +141,7 @@ Edit [src/data/data.js](src/data/data.js) and add a new entry following the exis
 }
 ```
 
-Then place the corresponding PNG in `public/pokemon_assets/`.
+Then place the corresponding PNG in `client/public/pokemon_assets/`.
 
 ---
 
@@ -137,7 +149,7 @@ Then place the corresponding PNG in `public/pokemon_assets/`.
 
 | Layer | Technology |
 |---|---|
-| Frontend | React 19, React Router 7 |
+| Frontend | React 19, React Router 7, Vite |
 | Backend | Express 4, Mongoose 7 |
 | Database | MongoDB |
 | Styling | Plain CSS |
